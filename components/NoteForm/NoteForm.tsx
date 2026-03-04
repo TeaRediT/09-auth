@@ -1,7 +1,7 @@
 import { useId } from "react";
 import css from "./NoteForm.module.css";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { postNote } from "@/lib/api";
+import { postNote } from "@/lib/api/api";
 import { toast, Toaster } from "react-hot-toast";
 import { useNoteStore } from "@/lib/store/noteStore";
 

@@ -3,9 +3,9 @@ import {
   HydrationBoundary,
   QueryClient,
 } from "@tanstack/react-query";
-import { fetchNotes } from "@/lib/api";
 import NotesPageClient from "./Notes.client";
 import { Metadata } from "next";
+import { fetchNotes } from "@/lib/api/serverApi";
 
 interface NotesPageProps {
   params: Promise<{ slug: string[] }>;
@@ -19,10 +19,10 @@ export const generateMetadata = async ({
   );
 
   return {
-    title: `${tag} Notes | My Notes`,
+    title: `${tag} Notes | NoteHub`,
     description: `View all your notes in the "${tag}" category.`,
     openGraph: {
-      title: `${tag} Notes | My Notes`,
+      title: `${tag} Notes | NoteHub`,
       description: `View all your notes in the "${tag}" category.`,
       url: `notes/filter/${tag}`,
       images: [
