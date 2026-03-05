@@ -1,4 +1,4 @@
-import { Note } from "@/types/note";
+import { Note, NoteList } from "@/types/note";
 import { cookies } from "next/headers";
 import { nextServer } from "./api";
 import { CheackSessionRequest } from "./clientApi";
@@ -8,9 +8,9 @@ export const fetchNotes = async (
   query: string,
   page: number,
   tag: string,
-): Promise<Note[]> => {
+): Promise<NoteList> => {
   const cookiesStore = await cookies();
-  const { data } = await nextServer.get<Note[]>(`/notes`, {
+  const { data } = await nextServer.get<NoteList>(`/notes`, {
     params: {
       ...(query === "" ? null : { search: query }),
       ...(tag === "all" ? null : { tag }),

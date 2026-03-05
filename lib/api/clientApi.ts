@@ -1,6 +1,6 @@
 import { User } from "@/types/user";
 import { nextServer } from "./api";
-import { CreateNote, Note } from "@/types/note";
+import { CreateNote, Note, NoteList } from "@/types/note";
 
 export type RegisterUser = Omit<User, "avatar">;
 
@@ -13,8 +13,8 @@ export const fetchNotes = async (
   query: string,
   page: number,
   tag: string,
-): Promise<Note[]> => {
-  const { data } = await nextServer.get<Note[]>(`/notes`, {
+): Promise<NoteList> => {
+  const { data } = await nextServer.get<NoteList>(`/notes`, {
     params: {
       ...(query === "" ? null : { search: query }),
       ...(tag === "all" ? null : { tag }),
