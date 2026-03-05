@@ -2,12 +2,7 @@ import { User } from "@/types/user";
 import { nextServer } from "./api";
 import { CreateNote, Note, NoteList } from "@/types/note";
 
-export type RegisterUser = Omit<User, "avatar">;
-
-export interface CheackSessionRequest {
-  success: boolean;
-  headers: { Cookie: string };
-}
+export type RegisterUser = Pick<User, "username" | "email">;
 
 export const fetchNotes = async (
   query: string,
@@ -58,9 +53,9 @@ export const logout = async (): Promise<void> => {
   await nextServer.post("/auth/logout");
 };
 
-export const cheackSession = async (): Promise<CheackSessionRequest> => {
-  const { data } = await nextServer.get<CheackSessionRequest>("/auth/session");
-  return data;
+export const checkSession = async (): Promise<boolean> => {
+  const { data } = await nextServer.get("/auth/session");
+  return data.success;
 };
 
 export const getMe = async (): Promise<User> => {

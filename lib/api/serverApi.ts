@@ -1,7 +1,6 @@
 import { Note, NoteList } from "@/types/note";
 import { cookies } from "next/headers";
 import { nextServer } from "./api";
-import { CheackSessionRequest } from "./clientApi";
 import { User } from "@/types/user";
 
 export const fetchNotes = async (
@@ -36,12 +35,13 @@ export const fetchNoteById = async (id: string): Promise<Note> => {
   return data;
 };
 
-export const cheackSession = async (): Promise<CheackSessionRequest> => {
+export const checkSession = async () => {
   const cookiesStore = await cookies();
-  const { data } = await nextServer.get<CheackSessionRequest>("/auth/session", {
+  const res = await nextServer.get("/auth/session", {
     headers: { Cookie: cookiesStore.toString() },
   });
-  return data;
+
+  return res;
 };
 
 export const getMe = async (): Promise<User> => {

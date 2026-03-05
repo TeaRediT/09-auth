@@ -1,6 +1,6 @@
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
-import { cheackSession } from "./lib/api/serverApi";
+import { checkSession } from "./lib/api/serverApi";
 import { parse } from "cookie";
 
 const privateRoutes = ["/notes", "/profile"];
@@ -20,8 +20,8 @@ export const proxy = async (req: NextRequest) => {
 
   if (!accessToken) {
     if (refreshToken) {
-      const { headers } = await cheackSession();
-      const setCookie = headers.Cookie;
+      const { headers } = await checkSession();
+      const setCookie = headers["set-cookie"];
       if (setCookie) {
         const cookieArray = Array.isArray(setCookie) ? setCookie : [setCookie];
         for (const cookieStr of cookieArray) {

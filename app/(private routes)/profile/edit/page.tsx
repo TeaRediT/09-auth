@@ -34,7 +34,7 @@ const Edit = () => {
   };
 
   const handleClose = () => {
-    router.push("/profile");
+    router.back();
   };
 
   return (
@@ -54,7 +54,7 @@ const Edit = () => {
 
             <form action={handleSubmit} className={css.profileInfo}>
               <div className={css.usernameWrapper}>
-                <label htmlFor="username">{user.username}</label>
+                <label htmlFor="username">Username:</label>
                 <input
                   name="username"
                   id="username"
@@ -64,7 +64,7 @@ const Edit = () => {
                 />
               </div>
 
-              <p>Email: {user.username}</p>
+              <p>Email: {user.email}</p>
 
               <div className={css.actions}>
                 <button type="submit" className={css.saveButton}>

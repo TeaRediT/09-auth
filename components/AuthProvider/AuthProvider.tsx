@@ -1,6 +1,6 @@
 "use client";
 
-import { cheackSession, getMe } from "@/lib/api/clientApi";
+import { checkSession, getMe } from "@/lib/api/clientApi";
 import { useAuthStore } from "@/lib/store/authStore";
 import { useEffect, useState } from "react";
 
@@ -13,25 +13,38 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
   const clearIsAuthenticated = useAuthStore(
     (state) => state.clearIsAuthenticated,
   );
-  const [isCheacking, setIsCheacking] = useState<boolean>(false);
+  const [isChecking, setIsChecking] = useState<boolean>(false);
+  const [error, setError] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchUser = async () => {
-      setIsCheacking(true);
-      const isAuthenticated = await cheackSession();
-      if (isAuthenticated.success) {
-        const user = await getMe();
-        if (user) setUser(user);
-        else {
-          clearIsAuthenticated();
+      setError(false);
+      setIsChecking(true);
+      try {
+        const isAuthenticated = await checkSession();
+        if (isAuthenticated) {
+          const user = await getMe();
+          if (user) setUser(user);
+          else {
+            clearIsAuthenticated();
+          }
         }
+      } catch {
+        setError(true);
+      } finally {
+        setIsChecking(false);
       }
-      setIsCheacking(false);
     };
     fetchUser();
   }, [clearIsAuthenticated, setUser]);
 
-  return isCheacking ? <p>Loading...</p> : children;
+  return (
+    <>
+      {error && <p>Error!!!</p>}
+      {isChecking && <p>Loading...</p>}
+      {!error && !isChecking && children}
+    </>
+  );
 };
 
 export default AuthProvider;
