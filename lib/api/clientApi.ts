@@ -1,18 +1,20 @@
 import { User } from "@/types/user";
 import { nextServer } from "./api";
+import { CreateNote, Note } from "@/types/note";
 
 export type RegisterUser = Omit<User, "avatar">;
 
-interface CheackSessionRequest {
+export interface CheackSessionRequest {
   success: boolean;
+  headers: { Cookie: string };
 }
 
 export const fetchNotes = async (
   query: string,
   page: number,
   tag: string,
-): Promise<NoteList> => {
-  const { data } = await axios.get<NoteList>(`/api/notes`, {
+): Promise<Note[]> => {
+  const { data } = await nextServer.get<Note[]>(`/notes`, {
     params: {
       ...(query === "" ? null : { search: query }),
       ...(tag === "all" ? null : { tag }),
@@ -25,26 +27,19 @@ export const fetchNotes = async (
 };
 
 export const fetchNoteById = async (id: string): Promise<Note> => {
-  const { data } = await axios.get<Note>(
-    `https://notehub-public.goit.study/api/notes/${id}`,
-  );
+  const { data } = await nextServer.get<Note>(`/notes/${id}`);
 
   return data;
 };
 
 export const createNote = async (note: CreateNote): Promise<Note> => {
-  const { data } = await axios.post<Note>(
-    `https://notehub-public.goit.study/api/notes`,
-    note,
-  );
+  const { data } = await nextServer.post<Note>(`/notes`, note);
 
   return data;
 };
 
 export const deleteNote = async (id: string): Promise<Note> => {
-  const { data } = await axios.delete<Note>(
-    `https://notehub-public.goit.study/api/notes/${id}`,
-  );
+  const { data } = await nextServer.delete<Note>(`/notes/${id}`);
 
   return data;
 };
@@ -63,9 +58,9 @@ export const logout = async (): Promise<void> => {
   await nextServer.post("/auth/logout");
 };
 
-export const cheackSession = async (): Promise<boolean> => {
+export const cheackSession = async (): Promise<CheackSessionRequest> => {
   const { data } = await nextServer.get<CheackSessionRequest>("/auth/session");
-  return data.success;
+  return data;
 };
 
 export const getMe = async (): Promise<User> => {
@@ -73,4 +68,7 @@ export const getMe = async (): Promise<User> => {
   return data;
 };
 
-export const updateMe = async () => {};
+export const updateMe = async (user: RegisterUser): Promise<User> => {
+  const { data } = await nextServer.patch<User>("/users/me", user);
+  return data;
+};

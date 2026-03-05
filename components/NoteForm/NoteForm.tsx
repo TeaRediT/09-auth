@@ -1,9 +1,9 @@
 import { useId } from "react";
 import css from "./NoteForm.module.css";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { postNote } from "@/lib/api/api";
 import { toast, Toaster } from "react-hot-toast";
 import { useNoteStore } from "@/lib/store/noteStore";
+import { createNote } from "@/lib/api/clientApi";
 
 interface NoteFormProps {
   onClose: () => void;
@@ -43,7 +43,7 @@ const NoteForm = ({ onClose }: NoteFormProps) => {
   };
 
   const addMutation = useMutation({
-    mutationFn: postNote,
+    mutationFn: createNote,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["notes"] });
       onClose();

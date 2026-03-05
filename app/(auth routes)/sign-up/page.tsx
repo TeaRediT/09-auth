@@ -13,6 +13,7 @@ const SignUp = () => {
 
   const handleSubmit = async (formdata: FormData) => {
     try {
+      setError(null);
       const formValues = Object.fromEntries(formdata) as RegisterUser;
       const user = await register(formValues);
       if (user) setUser(user);
