@@ -2,7 +2,12 @@ import { User } from "@/types/user";
 import { nextServer } from "./api";
 import { CreateNote, Note, NoteList } from "@/types/note";
 
-export type RegisterUser = Pick<User, "username" | "email">;
+export interface RegisterUser {
+  email: string;
+  password: string;
+}
+
+type UpdateUser = Pick<User, "email" | "username">;
 
 export const fetchNotes = async (
   query: string,
@@ -53,7 +58,7 @@ export const logout = async (): Promise<void> => {
   await nextServer.post("/auth/logout");
 };
 
-export const checkSession = async (): Promise<boolean> => {
+export const checkSession = async () => {
   const { data } = await nextServer.get("/auth/session");
   return data.success;
 };
@@ -63,7 +68,7 @@ export const getMe = async (): Promise<User> => {
   return data;
 };
 
-export const updateMe = async (user: RegisterUser): Promise<User> => {
+export const updateMe = async (user: UpdateUser): Promise<User> => {
   const { data } = await nextServer.patch<User>("/users/me", user);
   return data;
 };

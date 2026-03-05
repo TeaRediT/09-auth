@@ -15,7 +15,9 @@ const SignIn = () => {
   const handleSubmit = async (formdata: FormData) => {
     try {
       setError(null);
-      const formValues = Object.fromEntries(formdata) as RegisterUser;
+      const formValues = Object.fromEntries(
+        formdata,
+      ) as unknown as RegisterUser;
       const user = await login(formValues);
       if (user) setUser(user);
       router.push("/profile");
